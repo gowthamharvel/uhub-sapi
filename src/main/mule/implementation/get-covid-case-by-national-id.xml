@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="get-covid-case-by-national-idFlow" doc:id="cdbc1aa9-f640-4704-a2ca-051a15c00e3c" >
+		<logger level="INFO" doc:name="Logger" doc:id="7d9d2a6e-2f36-4607-9607-5e41f9e17292" message="#['in get covid case by nationalID transactionID:' ++ vars.transactionalid as String]"/>
+		<db:select doc:name="Select" doc:id="ba5b9b79-a549-4e82-93ff-e9296a04baf0" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM cvd_case_master WHERE NATIONAL_ID=:NATIONAL_ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	NATIONAL_ID: vars.nationalID
+}]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Choice" doc:id="4717ac07-14bf-4e17-9b6d-bae432667efc" >
+			<when expression="#[!isEmpty(payload)]">
+				<ee:transform doc:name="Transform Message" doc:id="b6824458-32fb-458d-b80b-8bcd28f84d03">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+
+	payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="da6bf50e-d939-453e-bdcf-89441d523601" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "NO DATA ON PROVIDED NATIONAL ID "
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

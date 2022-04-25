@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="get-covid-reportsFlow" doc:id="a837e17a-8106-4531-88a8-8e1d49b9bcac" >
+		<set-variable value="#[message.attributes.queryParams.state]" doc:name="Set Variable" doc:id="f617deea-4f8b-485d-a327-98ea3c665d4a" variableName="state"/>
+		<choice doc:name="Choice" doc:id="9361dc2b-4aaf-4597-afdc-3823550ac349" >
+			<when expression="#[!isEmpty(vars.state)]">
+				<db:select doc:name="Select" doc:id="644e9fb4-9f39-4909-95b2-9152db3ccb29" config-ref="Database_Config">
+					<db:sql ><![CDATA[SELECT * FROM cvd_case_master
+WHERE STATE=:state]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{
+	state: vars.state
+}]]]></db:input-parameters>
+				</db:select>
+			</when>
+			<otherwise >
+				<db:select doc:name="Select" doc:id="5f5b5fcd-0ebd-4cf5-bb3a-a61ff93ad012" config-ref="Database_Config">
+					<db:sql ><![CDATA[SELECT * FROM cvd_case_master]]></db:sql>
+				</db:select>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform Message" doc:id="6b2fa4ab-7831-4d67-abc2-9aece8b75d09">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	report: payload groupBy($.STATE)
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+	</flow>
+</mule>

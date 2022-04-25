@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="register-covid-caseFlow" doc:id="68c315ef-79a5-4537-900a-4fd1434ce736" >
+		<db:insert doc:name="Insert" doc:id="de236388-1f71-40b3-88a0-4b6b930a2a44" config-ref="Database_Config" autoGenerateKeys="true">
+			<db:sql ><![CDATA[INSERT INTO cvd_case_master(SOURCE,CASE_TYPE,FIRST_NAME,LAST_NAME,PHONE,EMAIL,DATE_OF_BIRTH,NATIONAL_ID,NATIONAL_ID_TYPE,STREET_ADDRESS,CITY,STATE,POSTAL,COUNTRY)
+VALUES (:SOURCE,:CASE_TYPE,:FIRST_NAME,:LAST_NAME,:PHONE,:EMAIL,:DATE_OF_BIRTH,:NATIONAL_ID,:NATIONAL_ID_TYPE,:STREET_ADDRESS,:CITY,:STATE,:POSTAL,:COUNTRY)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[output application/java
+---
+{
+	PHONE: payload.phone,
+	POSTAL: payload.address.postal,
+	STATE: payload.address.state,
+	LAST_NAME: payload.lastName,
+	EMAIL: payload.email,
+	FIRST_NAME: payload.firstName,
+	CASE_TYPE: payload.caseType,
+	NATIONAL_ID: payload.nationalID,
+	CITY: payload.address.city,
+	COUNTRY: payload.address.country,
+	NATIONAL_ID_TYPE: payload.nationalIDType,
+	SOURCE: payload.source,
+	STREET_ADDRESS: payload.address.streetAddress,
+	DATE_OF_BIRTH: payload.dateOfBirth
+}]]]></db:input-parameters>
+			<db:auto-generated-keys-column-names >
+				<db:auto-generated-keys-column-name value="CASE_ID" />
+			</db:auto-generated-keys-column-names>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="308838d6-8186-43e8-bfad-66b0177aa453" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

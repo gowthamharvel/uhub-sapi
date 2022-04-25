@@ -1,0 +1,24 @@
+%dw 2.0
+
+type auto_a33e1f01_2560_4608_988d_fd118bb46835_Input_Payload = {
+  firstName: String, 
+  lastName: String, 
+  address: {
+    country: String, 
+    streetAddress: String, 
+    city: String, 
+    state: String, 
+    postal: String, 
+    _?: Any
+  }, 
+  nationalID: String, 
+  phone: String, 
+  dateOfBirth: String, 
+  id: String, 
+  source: String, 
+  email?: String, 
+  nationalIDType: String, 
+  caseType: "recovered" | "death" | "positive" | "vaccinated", 
+  _?: Any
+}
+

@@ -1,0 +1,26 @@
+%dw 2.0
+
+type auto_a837e17a_8106_4531_88a8_8e1d49b9bcac_Output_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|
+    client_id: String, 
+    client_secret: String
+  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {| state?: String |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {| environment: "uho-prod-uhub-sapi" | "uho-test-uhub-sapi" | "uho-dev-uhub-sapi" | "uho-uat-uhub-sapi" |}, 
+  version: String, 
+  localAddress: String
+|}
+

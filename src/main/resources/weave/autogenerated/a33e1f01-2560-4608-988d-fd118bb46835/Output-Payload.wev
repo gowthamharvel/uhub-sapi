@@ -1,0 +1,7 @@
+%dw 2.0
+
+type auto_a33e1f01_2560_4608_988d_fd118bb46835_Output_Payload = {
+  caseID: String, 
+  _?: Any
+}
+
