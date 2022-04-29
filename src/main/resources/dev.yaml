@@ -1,8 +1,8 @@
 db:
-  host: "localhost"
-  port: "3306"
-  user: "springstudent"
-  password: "![TGT7Ia3hm1t2cLn/GkiYFQ==]"
+  host: "mysql-77472-0.cloudclusters.net"
+  port: "18234"
+  user: "admin"
+  password: "![qXwmc/LLyzozAtdg+PsfmA==]"
   database: "covid_cases"
 http:
   port: "8081"
