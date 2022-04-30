@@ -3,4 +3,9 @@
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="global-error-handlerError_Handler" doc:id="c4ac0952-3712-4aa4-abf7-354f41c25db7" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="740ff8df-2678-4583-9ed8-76ead5413a18" type="ANY">
+			<set-payload value='#[payload ++ error.description default ""]' doc:name="Set Payload" doc:id="0a8768a4-1c95-43f8-a37e-89d96299fe7e" />
+		</on-error-propagate>
+	</error-handler>
 </mule>
