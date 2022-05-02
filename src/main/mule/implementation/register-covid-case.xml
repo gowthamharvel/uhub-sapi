@@ -6,15 +6,6 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<flow name="register-covid-caseFlow" doc:id="68c315ef-79a5-4537-900a-4fd1434ce736" >
-		<ee:transform doc:name="Transform Message" doc:id="11fd919e-6029-4eed-85b9-b99eea339c94" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
 		<db:insert doc:name="Insert" doc:id="de236388-1f71-40b3-88a0-4b6b930a2a44" config-ref="Database_Config" autoGenerateKeys="true">
 			<db:sql ><![CDATA[INSERT INTO cvd_case_master(SOURCE,CASE_TYPE,FIRST_NAME,LAST_NAME,PHONE,EMAIL,DATE_OF_BIRTH,NATIONAL_ID,NATIONAL_ID_TYPE,STREET_ADDRESS,CITY,STATE,POSTAL,COUNTRY)
 VALUES (:SOURCE,:CASE_TYPE,:FIRST_NAME,:LAST_NAME,:PHONE,:EMAIL,:DATE_OF_BIRTH,:NATIONAL_ID,:NATIONAL_ID_TYPE,:STREET_ADDRESS,:CITY,:STATE,:POSTAL,:COUNTRY)]]></db:sql>
