@@ -26,11 +26,23 @@ WHERE STATE=:state]]></db:sql>
 		<ee:transform doc:name="Transform Message" doc:id="6b2fa4ab-7831-4d67-abc2-9aece8b75d09">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
+
 ---
-{
-	report: payload groupBy($.STATE)
-}]]></ee:set-payload>
+payload groupBy((item, index) -> item.STATE )
+mapObject {
+    state: $$,
+    totalstates: sizeOf($$),
+    cases:{
+            Total: sizeOf($.CASE_ID),
+            Positive: sizeOf($ filter((it2,in2)-> it2.CASE_TYPE contains  "positive") ),
+            Negative: sizeOf($ filter((it2,in2)-> it2.CASE_TYPE contains  "negative") ),
+            Vaccinated: sizeOf($ filter((it2,in2)-> it2.CASE_TYPE contains  "Vaccinated") )
+            }
+}
+    
+          
+]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 	</flow>
